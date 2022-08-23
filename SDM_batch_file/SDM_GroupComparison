@@ -1,0 +1,10 @@
+# Preprocess the studies ('gray matter', anisotropy =  1, isotropic FWHM =  20mm, mask = ' freesurfer', voxelMM = ' 2''):
+ pp gray matter, 1, 20, freesurfer, 2
+# Calculate the mean of all studies as SZvsHC using 6 threads
+SZvsHC = mi 50,,,6
+# Threshold 
+threshold /Users/laylalavalle/Desktop/IBMA/analyses/SZ/analysis_SZvsHC/SZvsHC_z,0.005,1
+# Perform FWE correction for model main_RM using 1000 permutations to obtain the NULL distribution and using 6 threads
+perm SZvsHC,1000,6
+# Threshold 
+threshold /Users/laylalavalle/Desktop/IBMA/analyses/SZ/analysis_SZvsHC/SZvsHC_z,0.05,1
