@@ -1,0 +1,27 @@
+export SUBJECTS_DIR=/mnt/data/subjects
+export FREESURFER_HOME=/mnt/data/soft/freesurfer
+export FSFAST_HOME=/mnt/data/soft/freesurfer//fsfast
+export FSF_OUTPUT_FORMAT=nii.gz
+export MNI_DIR=/mnt/data/soft/freesurfer//mni
+
+# mri_glmfit-sim runs cluster-correction
+# --glmdir directory that is being corrected for multiple comparisons
+# --perm 1000 3.0 abs run a permutation simulation with cluster-wise threshold of 3 (p < 0.001) and "abs" for unsigned hypothesis
+# --cwp 0.05 keep clusters that have cluster-wise p-values < 0.05
+# --2spaces adjusts for two hemispheres
+# --bg 1 do not run in parallel (n=1 means single threads)
+
+for hemi in lh rh
+do
+	for dir in $hemi.lgi.glmdir
+	do
+		srun export SUBJECTS_DIR=/mnt/data/subjects ; 
+		export FREESURFER_HOME=/mnt/data/soft/freesurfer ;
+		source /mnt/data/soft/freesurfer/SetUpFreeSurfer.sh ; 
+		/mnt/data/soft/freesurfer/bin/mri_glmfit-sim --glmdir $hemi.lgi.glmdir \
+		--perm 1000 3.0 abs \
+		--cwp 0.05 \
+		--2spaces \
+		--bg 1
+	done
+done
