@@ -1,0 +1,20 @@
+# mri_glmfit fits the general linear model
+# --fsgd fsgd file containing labels and covariates for each subj
+# --y concatenated dataset containing all of subjects's structural maps
+# --glmdir output label for the directory containing the results
+# --surf hemisphere of the template to analyse
+# --C contrast to analyse
+# --eres -save save the eres.mgh file
+
+for hemi in lh rh 
+do
+	srun export SUBJECTS_DIR=/mnt/data/subjects ; 
+	export FREESURFER_HOME=/mnt/data/soft/freesurfer ; 
+	source /mnt/data/soft/freesurfer/SetUpFreeSurfer.sh ; 
+	/mnt/data/soft/freesurfer/bin/mri_glmfit --y $hemi.lgi.mgh \
+	--fsgd exemple_fsgd.txt \
+	--glmdir $hemi.lgi.glmdir \
+	--surf fsaverage $hemi \
+	--C exemple_contrast_dods.txt \
+	--eres-save
+done
