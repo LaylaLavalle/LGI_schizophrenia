@@ -1,0 +1,17 @@
+# Preprocess the studies ('gray matter', anisotropy =  1, isotropic FWHM =  20mm, mask = ' freesurfer', voxelMM = ' 2''):
+ pp gray matter, 1, 20, freesurfer, 2
+ 
+# Calculate the mean of all studies as SZ_test_batch using 6 threads
+SZ_test_batch = mi 50,,,6
+
+# Creaete a mask from label [] for model SZ_test_batch
+L_STG = mask SZ_test_batch,label, 81
+
+# Extract values within mask 'L_STG' from model SZ_test_batch
+extract SZ_test_batch,L_STG
+
+# Biast Test of SZ_test_batch
+ bias SZ_test_batch,L_STG
+ 
+# Extract values within mask 'L_STG' from model SZ_test_batch
+extract SZ_test_batch,L_STG
