@@ -1,0 +1,50 @@
+# load the library
+```
+library(readr)
+library(Matrix)
+library(metafor)
+library(ggplot2)
+library(scales)
+library(weightr)
+library(RoBMA)
+```
+
+# import dataset
+```{r}
+L_ACC <- read.csv("L_ACC.csv", sep=";", colClasses=numeric())
+View(L_ACC)
+```
+
+# frequentist analysis
+```{r}
+res <- rma(yi=estimate, vi=var, data=L_ACC)
+res
+forest.rma(res)
+```
+
+# bayesian analysis
+fit the model
+```{r}
+fit <- RoBMA(d=L_ACC$estimate,
+             n=L_ACC$nTotal,
+             study_names=L_ACC$author,
+             seed=1)
+summary(fit)
+```
+
+# plot the results
+```{r}
+plot(fit, parameter ="mu")
+plot(fit, parameter ="tau")
+plot(fit, parameter ="omega")
+plot(fit, parameter = "weightfunction", rescale_x=TRUE)
+plot(fit, parameter = "PET_PEESE", ylim=c(-1, 2), xlim=c(0, 0.40))
+forest(fit)
+```
+
+# diagnostics
+```{r}
+summary(fit, type="individual")
+summary(fit, type="models", diagnostics = TRUE)
+```
+
